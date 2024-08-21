@@ -8,15 +8,16 @@ document.addEventListener('DOMContentLoaded', () => {
     form.addEventListener('submit', evaluateCripto)
 })
 
-function consultCipto(){
+async function consultCipto(){
     const url = `https://min-api.cryptocompare.com/data/top/mktcapfull?limit=10&tsym=USD`;
-    fetch(url)
-        .then(response => {
-            return response.json();
-        })
-        .then(result => {   
-            optionCripto(result.Data);
-        })
+
+    try {
+        const response = await fetch(url);
+        const result = await response.json();
+            optionCripto(result.Data)
+    } catch (error) {
+        console.log(error);
+    }
 }
 
 function evaluateCripto(e){
@@ -31,13 +32,18 @@ function evaluateCripto(e){
 
 }
 
-function getCripto(money, criptoMoney){
+async function getCripto(money, criptoMoney){
     showSpinner()
     const url = `https://min-api.cryptocompare.com/data/pricemultifull?fsyms=${criptoMoney}&tsyms=${money}`;
     console.log(url);
-    fetch(url)
-        .then(response => response.json())
-        .then(data => showImformationCripto(data.DISPLAY[criptoMoney][money]))
+
+    try {
+        const response = await fetch(url);
+        const data = await response.json()
+            showImformationCripto(data.DISPLAY[criptoMoney][money])
+    } catch (error) {
+        console.log(error);
+    }
 }
 
 function showImformationCripto(cripto){
